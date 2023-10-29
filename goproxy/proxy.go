@@ -32,7 +32,8 @@ import (
 
 	"github.com/viki-org/dnscache"
 
-	"github.com/ouqiang/goproxy/cert"
+	"proxy/goproxy/cert"
+
 	"github.com/ouqiang/websocket"
 )
 
@@ -206,7 +207,7 @@ func WithEnableWebsocketIntercept() Option {
 // New 创建proxy实例
 func New(opt ...Option) *Proxy {
 
-	log.Print("走vendor")
+	log.Print("走外面")
 	opts := &options{}
 	for _, o := range opt {
 		o(opts)
@@ -381,7 +382,7 @@ func (p *Proxy) tunnelProxy(ctx *Context, rw http.ResponseWriter) {
 
 	p.delegate.ErrorLog(fmt.Errorf("目标 %s", ctx.Req.URL.Host))
 
-	log.Println("header", ctx.Req.Header)
+	log.Println("tunnelProxy,header", ctx.Req.Header)
 	clientConn, err := hijacker(rw)
 	if err != nil {
 		p.delegate.ErrorLog(err)
@@ -673,7 +674,7 @@ func (p *Proxy) dialContext() DialContext {
 
 		addr = ip + addr[separator:]
 
-		log.Panicln("dialContext", addr)
+		log.Println("dialContext", addr)
 		return dialer.DialContext(ctx, network, addr)
 	}
 }
